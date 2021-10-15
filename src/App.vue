@@ -2,7 +2,7 @@
   <div class="container">
     <global-header :user="currentUser"></global-header>
     <column-list :list="list"></column-list>
-    <form action="">
+    <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
@@ -21,7 +21,10 @@
           v-model="passwordVal"
         ></validate-input>
       </div>
-    </form>
+      <template #submit>
+        <span class="btn btn-danger">Submit</span>
+      </template>
+    </validate-form>
   </div>
 </template>
 
@@ -30,6 +33,7 @@ import { defineComponent, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
+import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 
 const currentUser: UserProps = {
@@ -69,6 +73,7 @@ export default defineComponent({
   components: {
     ColumnList,
     GlobalHeader,
+    ValidateForm,
     ValidateInput
   },
   setup () {
@@ -82,13 +87,18 @@ export default defineComponent({
       { type: 'required', message: '密码不能为空' }
     ]
 
+    const onFormSubmit = (result: boolean) => {
+      console.log('1234', result)
+    }
+
     return {
       list: testData,
       currentUser,
       emailRules,
       emailVal,
       passwordRules,
-      passwordVal
+      passwordVal,
+      onFormSubmit
     }
   }
 })
