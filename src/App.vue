@@ -88,7 +88,7 @@ export default defineComponent({
     ]
 
     const onFormSubmit = (result: boolean) => {
-      console.log('1234', result)
+      console.log('result', result)
     }
 
     return {
