@@ -18,11 +18,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import Loader from '@/components/Loader.vue'
 import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
 
 export default defineComponent({
   name: 'App',
@@ -31,9 +32,15 @@ export default defineComponent({
     Loader
   },
   setup () {
-    const store = useStore()
+    const store = useStore<GlobalDataProps>()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    const token = computed(() => store.state.token)
+    onMounted(() => {
+      if (!currentUser.value.isLogin && token.value) {
+        store.dispatch('fetchCurrentUser')
+      }
+    })
 
     return {
       currentUser,
