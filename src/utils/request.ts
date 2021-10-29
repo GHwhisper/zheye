@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 
 const service = axios.create({
   baseURL: process.env.Vue_APP_BASE_API,
@@ -10,8 +11,14 @@ const service = axios.create({
 
 // request 拦截器
 service.interceptors.request.use(config => {
-  config.params = { ...config.params, icode: '123' }
+  store.commit('setLoading', true)
   return config
+})
+
+// response 拦截器
+service.interceptors.response.use(res => {
+  store.commit('setLoading', false)
+  return res
 })
 
 export default service

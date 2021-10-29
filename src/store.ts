@@ -33,13 +33,15 @@ export interface PostProps {
 }
 
 export interface GlobalDataProps {
-  columns: ColumnProps[],
-  posts: PostProps[],
+  loading: boolean
+  columns: ColumnProps[]
+  posts: PostProps[]
   user: UserProps
 }
 
 const store = createStore<GlobalDataProps>({
   state: {
+    loading: false,
     columns: [],
     posts: [],
     user: { isLogin: true, name: 'Shuang', columnId: 1 }
@@ -59,6 +61,9 @@ const store = createStore<GlobalDataProps>({
     },
     fetchPosts (state, rawData) {
       state.posts = rawData.data.list
+    },
+    setLoading (state, status) {
+      state.loading = status
     }
   },
   actions: {
