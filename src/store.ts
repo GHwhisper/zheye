@@ -1,13 +1,14 @@
 import { createStore } from 'vuex'
 import { getColumns, getColumnById } from '@/api/columns'
 import { getPosts } from '@/api/posts'
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 
 export interface UserProps {
   isLogin: boolean
-  name?: string
-  id?: number
-  columnId?: number
+  nickName?: string
+  _id?: string
+  column?: string
+  email?: string
 }
 
 export interface ImageProps {
@@ -47,7 +48,7 @@ const store = createStore<GlobalDataProps>({
     loading: false,
     columns: [],
     posts: [],
-    user: { isLogin: false, name: 'Shuang', columnId: 1 }
+    user: { isLogin: false }
   },
   mutations: {
     // login (state) {
@@ -70,6 +71,9 @@ const store = createStore<GlobalDataProps>({
     },
     login (state, rawData) {
       state.token = rawData.data.token
+    },
+    fetchCurrentUser (state, rawData) {
+      state.user = { isLogin: true, ...rawData.data }
     }
   },
   actions: {
@@ -89,6 +93,16 @@ const store = createStore<GlobalDataProps>({
       const { data } = await login(payload)
       commit('login', data)
       return data
+    },
+    async fetchCurrentUser ({ commit }) {
+      const { data } = await getUserInfo()
+      commit('fetchCurrentUser', data)
+      return data
+    },
+    loginAndFetch ({ dispatch }, loginData) {
+      return dispatch('login', loginData).then(() => {
+        return dispatch('fetchCurrentUser')
+      })
     }
   },
   getters: {
