@@ -59,6 +59,8 @@ export default defineComponent({
         }
         store.dispatch('loginAndFetch', payload).then(() => {
           router.push('/')
+        }).catch(e => {
+          console.log(e)
         })
       }
     }

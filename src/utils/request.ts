@@ -23,6 +23,11 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
   store.commit('setLoading', false)
   return res
+}, e => {
+  const { error } = e.response.data
+  store.commit('setError', { status: true, message: error })
+  store.commit('setLoading', false)
+  return Promise.reject(error)
 })
 
 export default service
