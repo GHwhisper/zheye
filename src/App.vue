@@ -2,7 +2,6 @@
   <div class="container">
     <global-header :user="currentUser"></global-header>
     <loader v-if="isLoading"></loader>
-    <message type="error" :message="error.message" v-if="error.status"></message>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
@@ -19,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed, onMounted, watch } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import Loader from '@/components/Loader.vue'
-import Message from '@/components/Message.vue'
+import createMessage from '@/components/createMessage'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 
@@ -31,8 +30,7 @@ export default defineComponent({
   name: 'App',
   components: {
     GlobalHeader,
-    Loader,
-    Message
+    Loader
   },
   setup () {
     const store = useStore<GlobalDataProps>()
@@ -43,6 +41,12 @@ export default defineComponent({
     onMounted(() => {
       if (!currentUser.value.isLogin && token.value) {
         store.dispatch('fetchCurrentUser')
+      }
+    })
+    watch(() => error.value.status, () => {
+      const { status, message } = error.value
+      if (status && message) {
+        createMessage(message, 'error')
       }
     })
 

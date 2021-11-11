@@ -16,6 +16,7 @@ service.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${token}`
   }
   store.commit('setLoading', true)
+  store.commit('setError', { status: false, message: '' })
   return config
 })
 
