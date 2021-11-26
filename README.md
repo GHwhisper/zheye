@@ -26,6 +26,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Username and Password
 ```
-username: test@123.com
-password: 123456
+username: test@123.com  password: 123456
+username: 111@test.com  password: 111111
 ```
